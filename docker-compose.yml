@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: FormSubmissionSystem.Api/Dockerfile
+    container_name: formsubmission-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5000
+    networks:
+      - formsubmission-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: formsubmission-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - formsubmission-network
+    restart: unless-stopped
+
+networks:
+  formsubmission-network:
+    driver: bridge
+
+
